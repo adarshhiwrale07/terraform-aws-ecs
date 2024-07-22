@@ -13,19 +13,7 @@ module "container_definition" {
   container_name  = local.container_name
   command         = var.service_command
   entrypoint      = var.container_entrypoint
-  linux_parameters = {
-    capabilities = {
-      add  = ["SYS_PTRACE"]
-      drop = []
-    }
-    devices            = []
-    initProcessEnabled = true
-    maxSwap            = null
-    sharedMemorySize   = null
-    swappiness         = null
-    tmpfs              = []
-    sysctls            = []
-  }
+  linux_parameters = null
 
   log_configuration = {
     logDriver : "awslogs"
@@ -46,10 +34,7 @@ module "container_definition" {
   ])
 
   map_secrets = var.secrets_map
-
   mount_points = var.container_mount_points
-
-  ulimits = []
 }
 
 

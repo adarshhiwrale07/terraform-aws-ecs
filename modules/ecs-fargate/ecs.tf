@@ -54,6 +54,23 @@ resource "aws_cloudwatch_log_group" "ecs_tasks" {
 }
 
 
+# ------------------------------------------------------------------------------
+# ECS IAM
+# ------------------------------------------------------------------------------
+data "aws_iam_policy_document" "ecs_task_exec_policy_doc" {
+  #checkov:skip=CKV_AWS_356:skipping 'Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions'
+  count = module.ecs_task_exec_policy_context.enabled ? 1 : 0
+  statement {
+    sid    = "SSMParameter"
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameters"
+    ]
+    resources = ["*"]
+  }
+}
+
+
 #------------------------------------------------------------------------------
 # Ecs Fargate
 #------------------------------------------------------------------------------
@@ -79,7 +96,7 @@ module "ecs_service" {
   health_check_timeout                 = 30
   ignore_changes_desired_count         = true
   ignore_changes_task_definition       = true
-  listener_protocol                    = "HTTP"
+  listener_protocol                    = "HTTPS"
   alb_https_ssl_policy                 = var.alb_https_ssl_policy
   load_balancer_arn                    = module.alb_public.alb_arn
   container_mount_points               = []
@@ -104,9 +121,8 @@ module "ecs_service" {
   target_group_protocol      = "HTTP"
   target_group_type          = "ip"
   task_cpu                   = var.task_cpu
-  task_exec_role_policy_docs = {}
   task_memory                = var.task_memory
-  task_role_policy_docs      = {}
+  task_exec_role_policy_docs = { default : try(data.aws_iam_policy_document.ecs_task_exec_policy_doc[0].json, {}) }
   vpc_id                     = var.vpc_id
   vpc_subnet_ids             = var.vpc_private_subnet_ids
 }

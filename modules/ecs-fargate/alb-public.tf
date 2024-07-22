@@ -29,6 +29,7 @@ module "alb_public" {
   attributes = ["alb", "public"]
 
   access_logs_enabled               = false
+  access_logs_s3_bucket_id          = ""
   additional_certs                  = []
   certificate_arn                   = var.acm_certificate_arn
   cross_zone_load_balancing_enabled = true
@@ -71,7 +72,7 @@ module "alb_public" {
   target_group_name                 = ""
   target_group_name_max_length      = 32
   target_group_port                 = 3000
-  target_group_protocol             = "HTTP"
+  target_group_protocol             = "HTTPS"
   target_group_protocol_version     = "HTTP1"
   target_group_target_type          = "ip"
   vpc_id                            = var.vpc_id

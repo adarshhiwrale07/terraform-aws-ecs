@@ -73,7 +73,7 @@ module "vpc_subnets" {
   metadata_http_put_response_hop_limit = 1
   metadata_http_tokens_required        = true
   nat_elastic_ips                      = []
-  nat_gateway_enabled                  = false
+  nat_gateway_enabled                  = true
   nat_instance_enabled                 = false
   nat_instance_type                    = "t3.micro"
   private_network_acl_id               = ""

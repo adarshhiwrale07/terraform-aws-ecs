@@ -14,4 +14,6 @@ module "ecs_fargate" {
   vpc_public_subnet_ids                      = module.vpc_subnets.public_subnet_ids
   vpc_private_subnet_ids                     = module.vpc_subnets.private_subnet_ids
   cloudwatch_log_expiration_days             = var.cloudwatch_log_expiration_days
+  task_cpu = 512
+  task_memory = 1024
 }

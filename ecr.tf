@@ -11,8 +11,8 @@ module "ecr" {
   image_names                = ["nodejs"]
   image_tag_mutability       = "MUTABLE"
   max_image_count            = 1000
-  principals_full_access     = []
-  principals_readonly_access = []
+  principals_full_access     = [local.account_id]
+  principals_readonly_access = [local.account_id]
   principals_lambda          = []
   protected_tags             = []
   scan_images_on_push        = true
